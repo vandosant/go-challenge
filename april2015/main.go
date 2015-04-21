@@ -7,16 +7,50 @@ import (
         "log"
         "net"
         "os"
+        // "bufio"
+        // "golang.org/x/crypto/nacl/box"
 )
+
+
+type secureReader struct {
+  public *[32]byte
+  reader io.Reader
+}
+func (r *secureReader) Read([]byte) (int, error) {
+  return 1, nil
+}
+
+
+type secureWriter struct {
+  public *[32]byte
+  writer io.Writer
+}
+func (w *secureWriter) Write([]byte) (int, error){
+  return 1, nil
+}
 
 // NewSecureReader instantiates a new SecureReader
 func NewSecureReader(r io.Reader, priv, pub *[32]byte) io.Reader {
-        return nil
+        sr := &secureReader {
+          public: pub,
+          reader: r,
+        }
+
+        return sr
 }
 
 // NewSecureWriter instantiates a new SecureWriter
 func NewSecureWriter(w io.Writer, priv, pub *[32]byte) io.Writer {
-        return nil
+        return newSecureWriter(w, priv, pub)
+}
+
+func newSecureWriter(w io.Writer, priv, pub *[32]byte) *secureWriter {
+  sw := &secureWriter{
+    public: &[32]byte{},
+    writer: w,
+  }
+
+  return sw
 }
 
 // Dial generates a private/public key pair,
