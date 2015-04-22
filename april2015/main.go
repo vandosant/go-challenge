@@ -8,7 +8,7 @@ import (
         "net"
         "os"
         // "bufio"
-        // "golang.org/x/crypto/nacl/box"
+        "golang.org/x/crypto/nacl/box"
 )
 
 
@@ -19,7 +19,6 @@ type secureReader struct {
 func (r *secureReader) Read([]byte) (int, error) {
   return 1, nil
 }
-
 
 type secureWriter struct {
   public *[32]byte
@@ -49,6 +48,8 @@ func newSecureWriter(w io.Writer, priv, pub *[32]byte) *secureWriter {
     public: &[32]byte{},
     writer: w,
   }
+
+  box.Precompute(sw.public, pub, priv)
 
   return sw
 }
