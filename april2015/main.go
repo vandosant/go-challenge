@@ -7,7 +7,6 @@ import (
         "log"
         "net"
         "os"
-        // "bufio"
         "golang.org/x/crypto/nacl/box"
 )
 
@@ -20,14 +19,6 @@ func (r *secureReader) Read([]byte) (int, error) {
   return 1, nil
 }
 
-type secureWriter struct {
-  public *[32]byte
-  writer io.Writer
-}
-func (w *secureWriter) Write([]byte) (int, error){
-  return 1, nil
-}
-
 // NewSecureReader instantiates a new SecureReader
 func NewSecureReader(r io.Reader, priv, pub *[32]byte) io.Reader {
         sr := &secureReader {
@@ -36,6 +27,14 @@ func NewSecureReader(r io.Reader, priv, pub *[32]byte) io.Reader {
         }
 
         return sr
+}
+
+type secureWriter struct {
+  public *[32]byte
+  writer io.Writer
+}
+func (w *secureWriter) Write([]byte) (int, error){
+  return 1, nil
 }
 
 // NewSecureWriter instantiates a new SecureWriter
