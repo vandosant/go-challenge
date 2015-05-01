@@ -13,9 +13,14 @@ import (
 )
 
 func main() {
+  port := os.Getenv("PORT")
+if port == "" {
+  port = "8080"
+}
+
   http.HandleFunc("/files/new", FileCreateHandler)
   http.Handle("/", http.FileServer(http.Dir("public")))
-  log.Fatal(http.ListenAndServe(":8080", nil))
+  log.Fatal(http.ListenAndServe(":"+port, nil))
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
